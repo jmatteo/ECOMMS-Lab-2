@@ -21,27 +21,35 @@
 %% AM Modulation - 1 signal
 
 %scale
-x = [0:0.001:2*pi];
+x = [0:0.001:1];
 
 %frequency to modulate       / source
-fSour = 5000;
-sigIn = cos(2*pi*fSour*x);
+fSour = 50;
+sigIn = cos(2*pi*fSour.*x);
 
 %modulation frequency        / channel
-fChan = 640000;
-sigChan = cos(2.*pi.*fChan.*x);
+fChan = 100;
+sigChan = cos(2*pi*fChan.*x);
 
 %modulate                    / modulator
-output1 = sigIn .* sigChan;
+out = sim('L2P1.slx');
+output1 = out.sigOut;
 
 figure(1)
 hold on
+
 subplot(2,1,1);
-plot(output1)
+plot(sigIn.*sigChan)
 
 subplot(2,1,2);
+plot(output1)
+
+subplot(2,2,3);
 plot(fft(output1))
 hold off
+
+%demodulate                  / demodulator
+demP1 = output1.*(output1 > 0);
 
 %% AM Modulation - 2 signal
 
@@ -50,7 +58,7 @@ x = [0:0.001:2*pi];
 
 %frequencies to modulate
 fSourA = 5000;
-fSourB = 6250;
+fSourB = 625;
 
 sigIn = cos(2*pi*fSourA*x)+cos(2*pi*fSourB*x);
 
